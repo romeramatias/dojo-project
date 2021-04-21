@@ -36,9 +36,11 @@ require([
    /* Variables */
    const urlMarzo = "https://5f7e1dfc0198da0016893544.mockapi.io/Users";
    const urlAbril = "https://5f7e1dfc0198da0016893544.mockapi.io/Users2";
+   const urlSalarios = "https://5f7e1dfc0198da0016893544.mockapi.io/Salarios";
 
    let botonEmpleadosMarzo = dom.byId("botonEmpleadosMarzo");
    let botonEmpleadosAbril = dom.byId("botonEmpleadosAbril");
+   let botonSalarios = dom.byId("botonSalarios");
 
    let spinner = dom.byId("spinner");
 
@@ -80,10 +82,35 @@ require([
       }
    });
 
-   /* Funciones */
-   const armarTabla = (empleados) => {
-      console.log(empleados);
+   on(botonSalarios, "mousedown", function (event) {
+      if (mouse.isLeft(event)) {
+         request(urlSalarios).then(
+            function (res) {
+               let empleados = JSON.parse(res);
+               armarTablaSalarios(empleados);
+            },
+            function (error) {
+               console.log(error);
+            }
+         );
+      }
+   });
 
+   /* Funciones */
+   const armarTablaSalarios = (empleados) => {
+      let tablaDatos = dom.byId("tablaDatos");
+
+      empleados.forEach((empleado) => {
+         let node = domConstruct.create("tr", {
+            innerHTML: `<th scope="row">${empleado.id}</th> <td>${empleado.nombre}</td> <td>USD ${empleado.sueldo}</td> <td>${empleado.btcAdress}</td>`,
+         });
+         domConstruct.place(node, tablaDatos, "before");
+      });
+
+      domAttr.set(tablaSalarios, "style", { visibility: "visible" });
+   };
+
+   const armarTabla = (empleados) => {
       let data = {
          identifier: "id",
          items: empleados,
@@ -98,12 +125,17 @@ require([
             { name: "Apellido", field: "apellido", width: "230px" },
             { name: "Direccion", field: "direccion", width: "230px" },
             { name: "Ciudad", field: "ciudad", width: "230px" },
-            { name: "Pais", field: "pais", width: "230px", formatter: (field) => {
-               if (field.toLowerCase() === 'argentina') {
-                  return "<p style='background-color:lightblue'> ARGENTINA!!! </p>"
-               }
-               return field;
-            } },
+            {
+               name: "Pais",
+               field: "pais",
+               width: "230px",
+               formatter: (field) => {
+                  if (field.toLowerCase() === "argentina") {
+                     return "<span style='background-color:lightblue;'> ARGENTINA!!! 🦧 </span>";
+                  }
+                  return field;
+               },
+            },
          ],
       ];
 
