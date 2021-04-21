@@ -1,1 +1,1 @@
-# dojo-project
+# Dojo Project
