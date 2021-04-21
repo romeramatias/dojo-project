@@ -6,11 +6,15 @@ require([
    "dojo/request",
    "dojo/parser",
    "dojo/dom-construct",
+   "dijit/registry",
+   "dojo/dom-attr",
    "dijit/layout/ContentPane",
    "dijit/layout/BorderContainer",
    "dijit/layout/TabContainer",
-   "dojox/grid/DataGrid",
+   "dojox/grid/EnhancedGrid",
    "dojo/data/ItemFileWriteStore",
+   "dijit/layout/StackController",
+   "dijit/layout/StackContainer",
    "dojo/domReady!",
 ], function (
    lang,
@@ -20,28 +24,38 @@ require([
    request,
    parser,
    domConstruct,
+   registry,
+   domAttr,
    ContentPane,
    BorderContainer,
    TabContainer,
-   DataGrid,
+   EnhancedGrid,
    ItemFileWriteStore,
+   StackController,
+   StackContainer,
    domReady
 ) {
    /* Variables */
    const urlMarzo = "https://5f7e1dfc0198da0016893544.mockapi.io/Users";
    const urlAbril = "https://5f7e1dfc0198da0016893544.mockapi.io/Users2";
+
    let botonEmpleadosMarzo = dom.byId("botonEmpleadosMarzo");
    let botonEmpleadosAbril = dom.byId("botonEmpleadosAbril");
+
+   let spinner = dom.byId("spinner");
 
    /* Eventos */
    /* Solicitud a la Api de los empleados de Marzo */
    on(botonEmpleadosMarzo, "mousedown", function (event) {
+      domAttr.set(spinner, "style", { visibility: "visible" });
+      domConstruct.empty("gridDiv");
       if (mouse.isLeft(event)) {
          request(urlMarzo).then(
             function (res) {
                let users = JSON.parse(res);
                //users.forEach((user) => empleados.push(user));
                armarTabla(users);
+               domAttr.set(spinner, "style", { visibility: "hidden" });
             },
             function (error) {
                console.log(error);
@@ -50,13 +64,16 @@ require([
       }
    });
 
-   /* Solicitud a la Api de los empleados de Abril*/
+   /* Solicitud a la Api de los empleados de Abril */
    on(botonEmpleadosAbril, "mousedown", function (event) {
+      domAttr.set(spinner, "style", { visibility: "visible" });
+      domConstruct.empty("gridDiv");
       if (mouse.isLeft(event)) {
          request(urlAbril).then(
             function (res) {
                let users = JSON.parse(res);
                armarTabla(users);
+               domAttr.set(spinner, "style", { visibility: "hidden" });
             },
             function (error) {
                console.log(error);
@@ -88,7 +105,7 @@ require([
       ];
 
       /* Creacion de la Tabla*/
-      let grid = new DataGrid({
+      let grid = new EnhancedGrid({
          id: "grid",
          store: store,
          structure: layout,
