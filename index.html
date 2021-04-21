@@ -47,8 +47,8 @@
                <!-- Tab 1 -->
                <div
                   data-dojo-type="dijit/layout/ContentPane"
+                  id="tabMarzo"
                   title="Tabla de Empleados"
-                  style="background-color: #f0ffff"
                   data-dojo-props="selected:true"
                >
                   <div data-dojo-type="dijit/layout/StackController" data-dojo-props="containerId:'contentStack'"></div>
@@ -56,23 +56,15 @@
                   <div class="jumbotron mx-3 mt-3">
                      <button id="botonEmpleadosMarzo" class="btn btn-info mb-3">Ingresados en Marzo</button>
                      <button id="botonEmpleadosAbril" class="btn btn-info mb-3">Ingresados en Abril</button>
-                     <br>
-                     <div class="spinner-border text-primary" id="spinner" style="visibility: hidden;" role="status"></div>
+                     <br />
+                     <div class="spinner-border text-primary" id="spinner" style="visibility: hidden" role="status"></div>
                      <div id="gridDiv" data-dojo-id="gridDiv"></div>
                   </div>
                </div>
 
                <!-- Tab 2 -->
-               <div data-dojo-type="dijit/layout/ContentPane" title="Buscar Empleado">
-                  <div class="jumbotron mx-3 mt-3">
-                     BUSCAR
-                     <input
-                        id="nombre"
-                        name="nombreSelect"
-                        data-dojo-props="
-                     value: 'aa'"
-                     />
-                  </div>
+               <div data-dojo-type="dijit/layout/ContentPane" title="Buscar Empleado" data-dojo-props="selected:false">
+                  <div class="jumbotron mx-3 mt-3"></div>
                </div>
 
                <!-- Tab 3 -->

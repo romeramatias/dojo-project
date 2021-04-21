@@ -12,9 +12,8 @@ require([
    "dijit/layout/BorderContainer",
    "dijit/layout/TabContainer",
    "dojox/grid/EnhancedGrid",
+   "dojox/grid/enhanced/plugins/Pagination",
    "dojo/data/ItemFileWriteStore",
-   "dijit/layout/StackController",
-   "dijit/layout/StackContainer",
    "dojo/domReady!",
 ], function (
    lang,
@@ -30,9 +29,8 @@ require([
    BorderContainer,
    TabContainer,
    EnhancedGrid,
+   Pagination,
    ItemFileWriteStore,
-   StackController,
-   StackContainer,
    domReady
 ) {
    /* Variables */
@@ -100,7 +98,12 @@ require([
             { name: "Apellido", field: "apellido", width: "230px" },
             { name: "Direccion", field: "direccion", width: "230px" },
             { name: "Ciudad", field: "ciudad", width: "230px" },
-            { name: "Pais", field: "pais", width: "230px" },
+            { name: "Pais", field: "pais", width: "230px", formatter: (field) => {
+               if (field.toLowerCase() === 'argentina') {
+                  return "<p style='background-color:lightblue'> ARGENTINA!!! </p>"
+               }
+               return field;
+            } },
          ],
       ];
 
@@ -108,6 +111,16 @@ require([
       let grid = new EnhancedGrid({
          id: "grid",
          store: store,
+         plugins: {
+            pagination: {
+               position: "bottom",
+               sizeSwitch: false,
+               gotoButton: true,
+               defaultPageSize: 10,
+            },
+         },
+         autoWidth: true,
+         autoHeight: true,
          structure: layout,
          rowSelector: "20px",
       });
@@ -118,5 +131,4 @@ require([
       /*Call startup() to render the grid*/
       grid.startup();
    };
-   
 });
