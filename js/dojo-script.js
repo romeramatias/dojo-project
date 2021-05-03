@@ -1,12 +1,11 @@
 require([
-   "dojo/_base/lang",
    "dojo/dom",
    "dojo/on",
    "dojo/mouse",
+   "dojo/ready",
    "dojo/request",
    "dojo/parser",
    "dojo/dom-construct",
-   "dijit/registry",
    "dojo/dom-attr",
    "dijit/layout/ContentPane",
    "dijit/layout/BorderContainer",
@@ -14,16 +13,19 @@ require([
    "dojox/grid/EnhancedGrid",
    "dojox/grid/enhanced/plugins/Pagination",
    "dojo/data/ItemFileWriteStore",
+   "dijit/form/Form",
+   "dijit/form/Button",
+   "dijit/form/TextBox",
+   "dijit/Dialog",
    "dojo/domReady!",
 ], function (
-   lang,
    dom,
    on,
    mouse,
+   ready,
    request,
    parser,
    domConstruct,
-   registry,
    domAttr,
    ContentPane,
    BorderContainer,
@@ -31,18 +33,44 @@ require([
    EnhancedGrid,
    Pagination,
    ItemFileWriteStore,
+   Form,
+   Button,
+   TextBox,
+   Dialog,
    domReady
 ) {
    /* Variables */
    const urlMarzo = "https://5f7e1dfc0198da0016893544.mockapi.io/Users";
    const urlAbril = "https://5f7e1dfc0198da0016893544.mockapi.io/Users2";
-   const urlSalarios = "https://5f7e1dfc0198da0016893544.mockapi.io/Salarios";
 
    let botonEmpleadosMarzo = dom.byId("botonEmpleadosMarzo");
    let botonEmpleadosAbril = dom.byId("botonEmpleadosAbril");
-   let botonSalarios = dom.byId("botonSalarios");
 
    let spinner = dom.byId("spinner");
+
+   let idGridBusqueda = 0;
+
+   let divUser = dom.byId("user");
+
+   // User del SessionStorage
+   ready(function () {
+      let user = {};
+      user.username = sessionStorage.getItem("username");
+      user.nombre = sessionStorage.getItem("nombre");
+      user.role = sessionStorage.getItem("role");
+      setBienvenida(user);
+      verificarRol(user);
+
+      let botonCerrarSesion = new Button(
+         {
+            label: "Cerrar Sesion",
+            onClick: function () {
+               cerrarSesion();
+            },
+         },
+         "botonCerrarSesion"
+      );
+   });
 
    /* Eventos */
    /* Solicitud a la Api de los empleados de Marzo */
@@ -53,7 +81,7 @@ require([
          request(urlMarzo).then(
             function (res) {
                let users = JSON.parse(res);
-               //users.forEach((user) => empleados.push(user));
+               idGridBusqueda = idGridBusqueda + 1;
                armarTabla(users);
                domAttr.set(spinner, "style", { visibility: "hidden" });
             },
@@ -72,6 +100,7 @@ require([
          request(urlAbril).then(
             function (res) {
                let users = JSON.parse(res);
+               idGridBusqueda = idGridBusqueda + 1;
                armarTabla(users);
                domAttr.set(spinner, "style", { visibility: "hidden" });
             },
@@ -82,32 +111,21 @@ require([
       }
    });
 
-   on(botonSalarios, "mousedown", function (event) {
-      if (mouse.isLeft(event)) {
-         request(urlSalarios).then(
-            function (res) {
-               let empleados = JSON.parse(res);
-               armarTablaSalarios(empleados);
-            },
-            function (error) {
-               console.log(error);
-            }
-         );
+   /* Tabla de EnhancedGrid */
+   const verificarRol = (user) => {
+      if (user.role === "it") {
+         dojo.style(dijit.byId("tabIngresar").controlButton.domNode, { display: "none" });
       }
-   });
+   };
 
-   /* Funciones */
-   const armarTablaSalarios = (empleados) => {
-      let tablaDatos = dom.byId("tablaDatos");
+   const setBienvenida = (user) => {
+      divUser.innerHTML = `<p class="bienvenidaParrafo"> Hola <strong>${user.nombre}</strong>!</p>`;
+      console.log(divUser);
+   };
 
-      empleados.forEach((empleado) => {
-         let node = domConstruct.create("tr", {
-            innerHTML: `<th scope="row">${empleado.id}</th> <td>${empleado.nombre}</td> <td>USD ${empleado.sueldo}</td> <td>${empleado.btcAdress}</td>`,
-         });
-         domConstruct.place(node, tablaDatos, "before");
-      });
-
-      domAttr.set(tablaSalarios, "style", { visibility: "visible" });
+   const cerrarSesion = () => {
+      sessionStorage.clear();
+      window.location.href = "./login.html";
    };
 
    const armarTabla = (empleados) => {
@@ -122,7 +140,17 @@ require([
       let layout = [
          [
             { name: "Nombre", field: "nombre", width: "230px" },
-            { name: "Apellido", field: "apellido", width: "230px" },
+            { name: "Apellido", field: "apellido", width: "200px" },
+            {
+               name: "Empresa",
+               field: "empresa",
+               width: "80px",
+               formatter: (field) => {
+                  let cap = "<span> <img style='width: 40px' src='./www/logo.png' /></span>";
+                  let sog = "<span> <img style='width: 40px' src='./www/sog.png' /></span>";
+                  return field ? cap : sog;
+               },
+            },
             { name: "Direccion", field: "direccion", width: "230px" },
             { name: "Ciudad", field: "ciudad", width: "230px" },
             {
@@ -141,14 +169,14 @@ require([
 
       /* Creacion de la Tabla*/
       let grid = new EnhancedGrid({
-         id: "grid",
+         id: "grid" + idGridBusqueda,
          store: store,
          plugins: {
             pagination: {
                position: "bottom",
                sizeSwitch: false,
                gotoButton: true,
-               defaultPageSize: 10,
+               defaultPageSize: 15,
             },
          },
          autoWidth: true,
@@ -157,10 +185,7 @@ require([
          rowSelector: "20px",
       });
 
-      /*append the new grid to the div*/
       grid.placeAt("gridDiv");
-
-      /*Call startup() to render the grid*/
       grid.startup();
    };
 });

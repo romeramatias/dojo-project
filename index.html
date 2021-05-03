@@ -12,6 +12,9 @@
       </script>
       <script src="//ajax.googleapis.com/ajax/libs/dojo/1.14.1/dojo/dojo.js"></script>
       <script src="./js/dojo-script.js"></script>
+      <script src="./js/formulario.js"></script>
+      <script src="./js/busqueda.js"></script>
+      <script src="./js/tabla-html.js"></script>
    </head>
 
    <body class="tundra">
@@ -20,85 +23,374 @@
          id="bordercontainer"
          data-dojo-type="dijit/layout/BorderContainer"
          data-dojo-props="design: 'headline', gutters:true, liveSplit:true"
-         style="width: 100%; height: 100%; background-color: #5f9ea0"
+         style="width: 100%; height: 100%"
       >
          <!-- Top Container -->
-         <div
-            id="pane1"
-            data-dojo-type="dijit/layout/ContentPane"
-            style="background-color: #f0ffff"
-            data-dojo-props="region:'top'"
-         >
+         <div id="pane1" class="topContainer" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'">
             <img src="./www/logo.png" id="imagen1" class="mx-1" style="height: 50px" />
+            <div id="user" class="bienvenida btn btn-secondary"></div>
+            <button id="botonCerrarSesion" class="btn btn-primary mb-3"></button>
+
          </div>
 
          <!-- Left Container -->
-         <div id="pane2" style="width: 200px; background-color:#F0FFFF" data-dojo-type="dijit/layout/ContentPane"
-         data-dojo-props="region: 'left', minSize:150, region:'leading', splitter:true"">LEFT PANE
-      </div>
-
-      <!-- Center Container -->
-      <div
-         id="pane3"
-         data-dojo-type="dijit/layout/ContentPane"
-         style="background-color: #f0ffff"
-         data-dojo-props="region: 'center'"
-      >
-         <!-- Tabs -->
-         <div class="tabs">
-            <div data-dojo-type="dijit/layout/TabContainer" class="tabcontainer">
-               <!-- Tab 1 -->
-               <div
-                  data-dojo-type="dijit/layout/ContentPane"
-                  id="tabMarzo"
-                  title="Tabla de Empleados"
-                  data-dojo-props="selected:true"
-               >
-                  <div data-dojo-type="dijit/layout/StackController" data-dojo-props="containerId:'contentStack'"></div>
-
-                  <div class="jumbotron mx-3 mt-3">
-                     <button id="botonEmpleadosMarzo" class="btn btn-info mb-3">Ingresados en Marzo</button>
-                     <button id="botonEmpleadosAbril" class="btn btn-info mb-3">Ingresados en Abril</button>
-                     <br />
-                     <div class="spinner-border text-primary" id="spinner" style="visibility: hidden" role="status"></div>
-                     <div id="gridDiv" data-dojo-id="gridDiv"></div>
-                  </div>
-               </div>
-
-               <!-- Tab 2 -->
-               <div data-dojo-type="dijit/layout/ContentPane" title="Salarios Empleados" data-dojo-props="selected:false">
-                  <div class="jumbotron mx-3 mt-3">
-                     <button id="botonSalarios" class="btn btn-info mb-3">Ver salarios</button>
-                     <br />
-                     <table class="table" id="tablaSalarios" style="visibility: hidden;">
-                        <thead class="thead-dark">
-                           <tr>
-                              <th scope="col">ID</th>
-                              <th scope="col">Nombre</th>
-                              <th scope="col">Salario</th>
-                              <th scope="col">BTC Adress</th>
-                           </tr>
-                        </thead>
-                        <tbody id="tablaDatos">
-                        </tbody>
-                     </table>
-                  </div>
-               </div>
-
-               <!-- Tab 3 -->
-               <div data-dojo-type="dijit/layout/ContentPane" title="Solicitud de alta de Empleado"></div>
+         <div
+            id="pane2"
+            class="tabsIzquierda"
+            data-dojo-type="dijit/layout/ContentPane"
+            data-dojo-props="region: 'left', minSize:150, region:'leading', splitter:true"
+         >
+            <!-- Tabs Left -->
+            <div id="tp2" data-dojo-type="dijit/TitlePane" data-dojo-props="title: '¿Quienes somos?', open:false">
+               Un líder global en servicios de consultoría, servicios de tecnología y transformación digital, Capgemini está a la
+               vanguardia de la innovación para abordar la diversidad de oportunidades que tienen sus empresas clientes en el
+               dinámico entorno de las plataformas, la nube y lo digital.
+            </div>
+            <div id="tp3" data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'Our Purpose', open:false">
+               Our purpose was developed in collaboration with the Group’s many stakeholders, and with its employees at the heart
+               of the process. It now forms one of the fundamentals of the Group.
+            </div>
+            <div id="tp4" data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'Oficinas en el mundo', open:false">
+               Capgemini opera en 44 países. Dentro de Africa, America, Asia, Europa, Middle East
             </div>
          </div>
-      </div>
 
-      <!-- Bottom Container -->
-      <div
-         id="pane5"
-         data-dojo-type="dijit/layout/ContentPane"
-         style="background-color: #f0ffff"
-         data-dojo-props="region: 'bottom'"
-      >
-         <img src="./www/logo2.png" style="height: 30px; float: right" />
+         <!-- Center Container -->
+         <div id="pane4" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'center'">
+            <!-- Tabs -->
+            <div class="tabs">
+               <div data-dojo-type="dijit/layout/TabContainer" class="tabcontainer">
+                  <!-- Tab 1 -->
+                  <div data-dojo-type="dijit/layout/ContentPane" id="tabMarzo" title="Tabla de Empleados" class="centerContainer">
+                     <div class="jumbotron mx-3 mt-3">
+                        <button id="botonEmpleadosMarzo" class="btn btn-primary mb-3">Ingresados en Abril</button>
+                        <button id="botonEmpleadosAbril" class="btn btn-primary mb-3">Ingresados en Mayo</button>
+                        <br />
+                        <div class="spinner-border text-primary" id="spinner" style="visibility: hidden" role="status"></div>
+                        <div id="gridDiv" data-dojo-id="gridDiv"></div>
+                     </div>
+                  </div>
+
+                  <!-- Tab 2 -->
+                  <div
+                     data-dojo-type="dijit/layout/ContentPane"
+                     title="Salarios Empleados"
+                     data-dojo-props="selected:false"
+                     class="centerContainer"
+                  >
+                     <div class="jumbotron mx-3 mt-3">
+                        <button id="botonSalarios" class="btn btn-primary mb-3">Ver salarios</button>
+                        <br />
+                        <table class="table" id="tablaSalarios" style="visibility: hidden">
+                           <thead class="thead-light">
+                              <tr>
+                                 <th scope="col">ID</th>
+                                 <th scope="col">Nombre</th>
+                                 <th scope="col">Salario</th>
+                                 <th scope="col">BTC Adress</th>
+                              </tr>
+                           </thead>
+                           <tbody id="tablaDatos"></tbody>
+                        </table>
+                     </div>
+                  </div>
+
+                  <!-- Tab 3 -->
+                  <div
+                     data-dojo-type="dijit/layout/ContentPane"
+                     title="Buscar Empleados"
+                     data-dojo-props="selected:true"
+                     class="centerContainer"
+                  >
+                     <div class="jumbotron mx-3 mt-3">
+                        <div class="row">
+                           <div class="col">
+                              <label for="nombre">Nombre:</label>
+                              <input
+                                 name="nombreBusqueda"
+                                 class="form-control"
+                                 type="text"
+                                 id="inputNombre"
+                                 placeholder="Ingrese el nombre un empleado..."
+                                 data-dojo-type="dijit/form/TextBox"
+                                 data-dojo-props="trim:true, propercase:true"
+                              />
+                           </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                           <div class="col">
+                              <label for="pais">País:</label>
+                              <br />
+                              <!--                               <input
+                                 name="pais"
+                                 class="form-control"
+                                 type="text"
+                                 id="inputPais"
+                                 placeholder="Ingrese el nombre de un país..."
+                                 data-dojo-type="dijit/form/TextBox"
+                                 data-dojo-props="trim:true, propercase:true"
+                              /> -->
+                              <input class="form-control" id="inputPais" />
+                           </div>
+                           <div class="col">
+                              <label for="empresa">Empresa:</label>
+                              <br />
+                              <input
+                                 data-dojo-type="dijit/form/RadioButton"
+                                 type="radio"
+                                 name="empresa"
+                                 id="inputEmpresaCap"
+                                 value="Capgemini"
+                              />
+                              Capgemini
+                              <input
+                                 data-dojo-type="dijit/form/RadioButton"
+                                 type="radio"
+                                 name="empresa"
+                                 id="inputEmpresaSog"
+                                 value="Sogeti"
+                              />
+                              Sogeti
+                              <input
+                                 data-dojo-type="dijit/form/RadioButton"
+                                 type="radio"
+                                 name="empresa"
+                                 id="inputEmpresaAmb"
+                                 value="Ambas"
+                              />
+                              Ambas
+                           </div>
+                           <div class="col">
+                              <label for="fromDate">Ingreso:</label>
+                              <input
+                                 data-dojo-id="myFromDate"
+                                 type="text"
+                                 name="fromDate"
+                                 data-dojo-type="dijit/form/DateTextBox"
+                                 required="true"
+                                 onChange="myToDate.constraints.min = arguments[0];"
+                              />
+                              <br />
+                              <label for="toDate">Hasta:</label>
+                              <input
+                                 data-dojo-id="myToDate"
+                                 type="text"
+                                 name="toDate"
+                                 data-dojo-type="dijit/form/DateTextBox"
+                                 required="true"
+                                 onChange="myFromDate.constraints.max = arguments[0];"
+                              />
+                           </div>
+                        </div>
+                        <div class="d-grid gap-2">
+                           <button id="buscarEmpleados" class="btn btn-primary my-3">Buscar Empleados</button>
+                        </div>
+                        <div data-dojo-type="dijit/Dialog" data-dojo-id="sinResultados" title="Error">
+                           <p>No se han encontrado empleados, intente nuevamente.</p>
+                        </div>
+                        <div id="gridDivBusqueda" class="" data-dojo-id="gridDivBusqueda"></div>
+                        <div
+                           class="spinner-border text-primary mx-3"
+                           id="spinnerBusqueda"
+                           style="visibility: hidden"
+                           role="status"
+                        ></div>
+                     </div>
+                  </div>
+
+                  <!-- Tab 4 -->
+
+                  <div
+                     data-dojo-type="dijit/layout/ContentPane"
+                     id="tabIngresar"
+                     title="Ingresar Nuevo Empleado"
+                     class="centerContainer"
+                  >
+                     <div class="jumbotron mx-3 mt-3">
+                        <form
+                           class="formulario"
+                           id="form"
+                           data-dojo-type="dijit/form/Form"
+                           enctype="multipart/form-data"
+                           action=""
+                           method="POST"
+                        >
+                           <div class="row">
+                              <div class="col">
+                                 <label for="nombres">Nombres:</label>
+                                 <input
+                                    name="nombres"
+                                    required="true"
+                                    class="form-control"
+                                    type="text"
+                                    id="nombres"
+                                    placeholder="Ingrese los nombres..."
+                                    data-dojo-type="dijit/form/ValidationTextBox"
+                                    data-dojo-props="trim:true, propercase:true"
+                                    missingMessage="Este campo debe ser completado"
+                                 />
+                              </div>
+
+                              <div class="col">
+                                 <label for="apellido">Apellido:</label>
+                                 <input
+                                    name="apellido"
+                                    required="true"
+                                    class="form-control"
+                                    type="text"
+                                    id="apellido"
+                                    placeholder="Ingrese el apellido..."
+                                    data-dojo-type="dijit/form/ValidationTextBox"
+                                    data-dojo-props="trim:true, propercase:true"
+                                    missingMessage="Este campo debe ser completado"
+                                 />
+                              </div>
+
+                              <div class="col">
+                                 <label for="empresa">Empresa:</label>
+                                 <br />
+                                 <div id="selectEmpresa"></div>
+                              </div>
+                           </div>
+                           <br />
+
+                           <div class="row">
+                              <div class="col">
+                                 <label for="direccion">Direccion:</label>
+                                 <input
+                                    name="direccion"
+                                    required="true"
+                                    class="form-control"
+                                    type="text"
+                                    id="direccion"
+                                    placeholder="Ingrese la dirección..."
+                                    data-dojo-type="dijit/form/ValidationTextBox"
+                                    data-dojo-props="trim:true, propercase:true"
+                                    missingMessage="Este campo debe ser completado"
+                                 />
+                              </div>
+
+                              <div class="col">
+                                 <label for="ciudad">Ciudad:</label>
+                                 <input
+                                    name="ciudad"
+                                    required="true"
+                                    class="form-control"
+                                    type="text"
+                                    id="ciudad"
+                                    placeholder="Ingrese la ciudad..."
+                                    data-dojo-type="dijit/form/ValidationTextBox"
+                                    data-dojo-props="trim:true, propercase:true"
+                                    missingMessage="Este campo debe ser completado"
+                                 />
+                              </div>
+
+                              <div class="col">
+                                 <label for="fechaIngreso">Fecha de ingreso:</label>
+                                 <br />
+                                 <input
+                                    name="fechaIngreso"
+                                    required="true"
+                                    type="text"
+                                    id="fechaIngreso"
+                                    data-dojo-type="dijit/form/DateTextBox"
+                                    missingMessage="La fecha no puede ser vacia"
+                                 />
+                              </div>
+                           </div>
+                           <br />
+
+                           <div class="row">
+                              <div class="col">
+                                 <label for="email">Email:</label>
+                                 <input
+                                    name="email"
+                                    required="true"
+                                    class="form-control"
+                                    type="text"
+                                    id="email"
+                                    placeholder="Ingrese el email..."
+                                    data-dojo-type="dijit/form/ValidationTextBox"
+                                    validator="dojox.validate.isEmailAddress"
+                                    missingMessage="El email ingresado no es valido"
+                                 />
+                              </div>
+                              <div class="col">
+                                 <label for="dni">DNI:</label>
+                                 <input
+                                    name="dni"
+                                    required="true"
+                                    class="form-control"
+                                    type="text"
+                                    id="dni"
+                                    placeholder="Ingrese número de DNI..."
+                                    data-dojo-type="dijit.form.ValidationTextBox"
+                                    data-dojo-props="regExp:'\\d{8}', invalidMessage:'Invalid zip code.'"
+                                    missingMessage="Numero de DNI invalido"
+                                 />
+                              </div>
+
+                              <div class="col">
+                                 <label for="pais">Pais:</label>
+                                 <input
+                                    name="pais"
+                                    required="true"
+                                    class="form-control"
+                                    type="text"
+                                    id="pais"
+                                    placeholder="Ingrese el pais..."
+                                    data-dojo-type="dijit/form/ValidationTextBox"
+                                    data-dojo-props="trim:true, propercase:true"
+                                    missingMessage="Este campo debe ser completado"
+                                 />
+                              </div>
+                           </div>
+                           <br />
+                           <button id="botonDialog" type="submit">Ingresar Empleado</button>
+                           <button id="botonVaciar" type="submit">Vaciar Campos</button>
+                        </form>
+                        <br />
+                        <div id="resultado"></div>
+                        <br />
+                        <div id="gridDivIngresoEmpleado" data-dojo-id="gridDivIngresoEmpleado"></div>
+
+                        <div
+                           data-dojo-type="dijit/Dialog"
+                           data-dojo-id="confirmacionEmpleado"
+                           title="Desea ingresar el siguiente empleado?  "
+                        >
+                           <p>Verifique que los datos sean correctos.</p>
+                           <div id="gridDivVerificarEmpleado" data-dojo-id="gridDivVerificarEmpleado"></div>
+
+                           <br />
+
+                           <div class="dijitDialogPaneActionBar">
+                              <button type="button" id="botonIngresar">Ingresar</button>
+                              <button
+                                 data-dojo-type="dijit/form/Button"
+                                 type="button"
+                                 data-dojo-props="onClick:function(){confirmacionEmpleado.hide();}"
+                                 id="cancel"
+                              >
+                                 Cancelar
+                              </button>
+                           </div>
+                        </div>
+
+                        <div data-dojo-type="dijit/Dialog" data-dojo-id="dialogFaltanCampos" title="Hay campos incompletos">
+                           <p>Debe llenar todos los campos antes de ingresar un empleado.</p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <!-- Bottom Container -->
+         <div id="pane5" class="footer" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'bottom'">
+            <img src="./www/logo2.png" style="height: 30px; float: right" />
+         </div>
       </div>
    </body>
 </html>
