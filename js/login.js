@@ -3,9 +3,11 @@ require([
    "dojo/on",
    "dojo/ready",
    "dojo/parser",
+   "dojo/_base/fx",
    "dojo/dom",
    "dojo/dom-construct",
    "dojo/dom-attr",
+   "dojo/dom-style",
    "dijit/layout/ContentPane",
    "dijit/layout/BorderContainer",
    "dijit/layout/TabContainer",
@@ -25,9 +27,11 @@ require([
    on,
    ready,
    parser,
+   fx,
    dom,
    domConstruct,
    domAttr,
+   style,
    ContentPane,
    BorderContainer,
    TabContainer,
@@ -73,6 +77,8 @@ require([
       title: error,
       content: "Debe llenar el campo de usuario 😒",
    });
+
+   dialogWaiter = new Dialog({});
 
    // Store
    let usuarios = [
@@ -126,11 +132,15 @@ require([
    };
 
    const loginExitoso = (usuario) => {
-      sessionStorage.setItem("username", usuario.username);
-      sessionStorage.setItem("role", usuario.role);
-      sessionStorage.setItem("nombre", usuario.nombre);
+      mostrarDialogWaiter();
 
-      window.location.href = "./index.html";
+      setTimeout(function () {
+         sessionStorage.setItem("username", usuario.username);
+         sessionStorage.setItem("role", usuario.role);
+         sessionStorage.setItem("nombre", usuario.nombre);
+
+         window.location.href = "./index.html";
+      }, 4000);
    };
 
    const verificarCampos = (username, password) => {
@@ -173,5 +183,30 @@ require([
       dialogUserIncorrecto.setContent(`No se ha encontrado el usuario con nombre '${username}' 🤷‍♀️`);
       dialogUserIncorrecto.show();
       vaciarCamposFormulario();
+   };
+
+   const mostrarDialogWaiter = () => {
+      dialogWaiter.show();
+      mostrarLogo();
+      logoOcultar();
+   };
+
+   const mostrarLogo = () => {
+      style.set("logo", "opacity", "0");
+      var fadeArgs = {
+         node: "logo",
+         duration: 2000,
+      };
+      fx.fadeIn(fadeArgs).play();
+   };
+
+   const logoOcultar = () => {
+      var fadeArgs = {
+         node: "logo",
+         duration: 2000,
+      };
+      setTimeout(function () {
+         fx.fadeOut(fadeArgs).play();
+      }, 2000);
    };
 });
