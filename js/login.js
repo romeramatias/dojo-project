@@ -100,6 +100,9 @@ require([
             onClick: function () {
                login();
             },
+            onSubmit: function () {
+               login();
+            }
          },
          "botonLogin"
       );
@@ -107,6 +110,9 @@ require([
 
    // Funciones
    const login = () => {
+
+
+
       username = dom.byId("inputUser").value;
       password = dom.byId("inputPassword").value;
 
