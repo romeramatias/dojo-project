@@ -72,3 +72,7 @@ body {
 .bienvenidaParrafo {
    margin-bottom: auto;
 }
+
+.dijitInline {
+   display: block;
+}

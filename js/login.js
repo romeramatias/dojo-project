@@ -91,7 +91,6 @@ require([
    ready(function () {
       let botonLogin = new Button(
          {
-            style: "display: block;",
             onClick: function () {
                login();
             },
