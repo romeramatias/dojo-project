@@ -105,20 +105,25 @@ require([
       let empresa = verificarEmpresa();
       let nombre = dom.byId("inputNombre").value;
 
-      domConstruct.empty("gridDivBusqueda");
-      domAttr.set(spinnerBusqueda, "style", { visibility: "visible" });
+      if (empresa === "empty") {
+         mostrarAlertaEmpresa();
+      } else {
+         domConstruct.empty("gridDivBusqueda");
+         domAttr.set(spinnerBusqueda, "style", { visibility: "visible" });
+         dojo.style(dom.byId("empresaRequerida"), { display: "none" });
 
-      // Solicitud a la API
-      request(urlEmpleados).then(
-         function (res) {
-            let users = JSON.parse(res);
-            buscarEmpleados(users, pais, empresa, nombre);
-            domAttr.set(spinnerBusqueda, "style", { visibility: "hidden" });
-         },
-         function (error) {
-            console.log(error);
-         }
-      );
+         // Solicitud a la API
+         request(urlEmpleados).then(
+            function (res) {
+               let users = JSON.parse(res);
+               buscarEmpleados(users, pais, empresa, nombre);
+               domAttr.set(spinnerBusqueda, "style", { visibility: "hidden" });
+            },
+            function (error) {
+               console.log(error);
+            }
+         );
+      }
    };
 
    // Filtrando la lista de empleado
@@ -138,7 +143,7 @@ require([
          }
       });
 
-      if (empresa != null) {
+      if (empresa != null && empresa != "ambas") {
          if (empresa === "capgemini") {
             empleados = empleados.filter((element) => element.empresa == true);
          } else {
@@ -213,13 +218,25 @@ require([
    };
 
    const verificarEmpresa = () => {
+      let empresa = "";
+
       let checkedCap = dom.byId("inputEmpresaCap").checked;
       let checkedSog = dom.byId("inputEmpresaSog").checked;
+      let checkedAmbas = dom.byId("inputEmpresaAmb").checked;
 
-      if (!checkedCap && !checkedSog) {
-         return null;
+      if (!checkedCap && !checkedSog && !checkedAmbas) {
+         return "empty";
       }
 
-      return checkedCap ? "capgemini" : "sogeti";
+      empresa = checkedCap ? "capgemini" : "sogeti";
+      if (checkedAmbas) {
+         empresa = "ambas";
+      }
+
+      return empresa;
+   };
+
+   const mostrarAlertaEmpresa = () => {
+      dojo.style(dom.byId("empresaRequerida"), { display: "block" });
    };
 });

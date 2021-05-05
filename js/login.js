@@ -50,7 +50,7 @@ require([
    // Variables
    let username;
    let password;
-   let error = "Error 🕺🏻";
+   let error = "Error";
 
    // Dialogs
    dialogPassword = new Dialog({
@@ -95,14 +95,14 @@ require([
 
    // Boton
    ready(function () {
-      let botonLogin = new Button(
+      botonLogin = new Button(
          {
             onClick: function () {
                login();
             },
             onSubmit: function () {
                login();
-            }
+            },
          },
          "botonLogin"
       );
@@ -110,9 +110,7 @@ require([
 
    // Funciones
    const login = () => {
-
-
-
+      console.log('login');
       username = dom.byId("inputUser").value;
       password = dom.byId("inputPassword").value;
 

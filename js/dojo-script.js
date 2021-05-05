@@ -120,7 +120,6 @@ require([
 
    const setBienvenida = (user) => {
       divUser.innerHTML = `<p class="bienvenidaParrafo"> Hola <strong>${user.nombre}</strong>!</p>`;
-      console.log(divUser);
    };
 
    const cerrarSesion = () => {
