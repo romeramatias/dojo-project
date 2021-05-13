@@ -57,7 +57,8 @@ require([
       let user = {};
       user.username = sessionStorage.getItem("username");
       user.nombre = sessionStorage.getItem("nombre");
-      user.role = sessionStorage.getItem("role");
+      user.rol = sessionStorage.getItem("rol");
+      console.log(user);
       setBienvenida(user);
       verificarRol(user);
 
@@ -113,7 +114,7 @@ require([
 
    /* Tabla de EnhancedGrid */
    const verificarRol = (user) => {
-      if (user.role === "it") {
+      if (user.rol === "it") {
          dojo.style(dijit.byId("tabIngresar").controlButton.domNode, { display: "none" });
       }
    };

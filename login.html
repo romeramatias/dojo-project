@@ -1,10 +1,3 @@
-<!-- TODO
-   Campo obligatorio en busqueda SI
-   Icon waiter fullscreen block
-
-   Registros de usuario con mail, funcion de confirmar mail
--->
-
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -17,10 +10,19 @@
 
       <!-- Dojo -->
       <script>
-         dojoConfig = { async: true, parseOnLoad: true };
+         dojoConfig = {
+            has: {
+               "dojo-firebug": true,
+            },
+            parseOnLoad: true,
+            foo: "bar",
+            async: true,
+         };
       </script>
       <script src="//ajax.googleapis.com/ajax/libs/dojo/1.14.1/dojo/dojo.js"></script>
       <script src="./js/login.js"></script>
+      <script src="./js/registro.js"></script>
+      <script src="./js/users-store.js"></script>
 
       <title>Log In | Capgemini</title>
    </head>
@@ -50,6 +52,7 @@
                            <button id="botonLogin">Ingresar</button>
                         </div>
                      </form>
+                     <button id="botonRegistro">Registrarse</button>
                   </div>
                </div>
             </div>
@@ -57,10 +60,236 @@
       </div>
 
       <!-- Dialogs -->
-      <div data-dojo-type="dijit/Dialog" data-dojo-id="dialogWaiter" title="Login Exitoso">
+      <!-- DIALOG WAIT -->
+      <div data-dojo-type="dijit/Dialog" data-dojo-id="dialogWaiter" class="dialogExito" id="dialogWaiter" title="Login Exitoso">
          <p>Aguarde mientras cargamos todo...</p>
          <div class="text-center" id="logo">
             <img src="./www/logo2.png" style="height: 60px" />
+         </div>
+      </div>
+
+      <!-- DIALOG REGISTRO -->
+      <div id="dialogs">
+         <div
+            data-dojo-type="dijit/Dialog"
+            data-dojo-id="dialogRegistro"
+            id="dialogRegistro"
+            title="Datos | Registro"
+            class="dialogRegistro"
+            onchange="dialogRegistro.habilitarSiguiente()"
+            onkeyup="dialogRegistro.habilitarSiguiente()"
+            execute="dialogRegistro.guardarUsuario(arguments[0])"
+            data-dojo-props="closable: false, parseOnLoad:true"
+         >
+            <p>Completá todos los campos para registrarte</p>
+
+            <div class="dijitDialogPaneContentArea">
+               <div class="form-group my-3">
+                  <input
+                     data-dojo-type="dijit/form/TextBox"
+                     data-dojo-props="trim:true, propercase:true"
+                     class="form-control"
+                     placeholder="Ingrese su nombre completo..."
+                     type="text"
+                     name="nombre"
+                     id="nombre"
+                     onkeyup="dialogRegistro.validarNombre()"
+                  />
+                  <div id="nombreNoValido" class="text-center invalid-feedback"></div>
+               </div>
+
+               <div class="form-group my-3">
+                  <input
+                     data-dojo-type="dijit/form/TextBox"
+                     class="form-control"
+                     placeholder="Ingrese un nombre de usuario..."
+                     type="text"
+                     name="username"
+                     id="username"
+                     onkeyup="dialogRegistro.validarUsername()"
+                  />
+                  <div id="usernameNoValido" class="text-center invalid-feedback"></div>
+               </div>
+
+               <div class="form-group my-3">
+                  <input
+                     data-dojo-type="dijit/form/TextBox"
+                     placeholder="Ingrese su email..."
+                     class="form-control"
+                     type="text"
+                     name="email"
+                     id="email"
+                     missingMessage="El email ingresado no es valido"
+                     onkeyup="dialogRegistro.validarEmail()"
+                  />
+                  <div id="emailNoValido" class="text-center invalid-feedback"></div>
+               </div>
+
+               <div class="form-group my-3">
+                  <input
+                     data-dojo-type="dijit/form/TextBox"
+                     placeholder="Ingrese nuevamente su email..."
+                     class="form-control"
+                     type="text"
+                     name="email2"
+                     id="email2"
+                     missingMessage="El email ingresado no es valido"
+                     onkeyup="dialogRegistro.validarEmailsIguales()"
+                  />
+                  <div id="emailNoValido2" class="text-center invalid-feedback"></div>
+               </div>
+
+               <div class="form-group my-3">
+                  <div class="text-center mb-3">¿En que area te desempeñas?</div>
+                  <div class="row">
+                     <div class="col">
+                        <div class="custom-control custom-radio text-center">
+                           <input
+                              type="radio"
+                              class="custom-control-input"
+                              id="rolIT"
+                              name="radio-stacked"
+                              required
+                              onClick="dialogRegistro.validarRol()"
+                           />
+                           <label class="custom-control-label" for="customControlValidation2">IT</label>
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="custom-control custom-radio text-center">
+                           <input
+                              type="radio"
+                              class="custom-control-input"
+                              id="rolHR"
+                              name="radio-stacked"
+                              required
+                              onClick="dialogRegistro.validarRol()"
+                           />
+                           <label class="custom-control-label" for="customControlValidation3">HR</label>
+                           <div class="invalid-feedback">More example invalid feedback text</div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="form-group my-3" id="legajo">
+                  <input
+                     data-dojo-type="dijit/form/ValidationTextBox"
+                     data-dojo-props="maxLength:4"
+                     placeholder="Ingrese su numero de legajo..."
+                     class="form-control"
+                     type="number"
+                     name="numLegajo"
+                     id="numLegajo"
+                     onkeyup="dialogRegistro.validarNumLegajo()"
+                  />
+                  <div id="legajoNoValido" class="text-center invalid-feedback"></div>
+               </div>
+            </div>
+
+            <div class="dijitDialogPaneActionBar">
+               <div class="row">
+                  <div class="col">
+                     <button id="botonSiguiente" type="submit">Siguiente</button>
+                  </div>
+                  <div class="col">
+                     <button data-dojo-type="dijit/form/Button" type="button" onClick="dialogRegistro.cerrarFormulario()">
+                        Cancelar
+                     </button>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <!-- DIALOG PASSWORD -->
+         <div
+            data-dojo-type="dijit/Dialog"
+            data-dojo-id="dialogPassword"
+            id="dialogPassword"
+            title="Contraseña | Registro"
+            class="dialogRegistro"
+            onchange="dialogPassword.habilitarRegistro()"
+            onkeyup="dialogPassword.habilitarRegistro()"
+            execute="dialogPassword.guardarUsuarioFull(arguments[0])"
+            data-dojo-props="closable: false, parseOnLoad:true"
+         >
+            <p>
+               Es momento de establecer una contraseña
+               <button data-dojo-type="dijit/form/Button" type="button" style="float: right" onClick="dialogPassword.volver()">
+                  Volver
+               </button>
+            </p>
+            <div class="form-group my-3">
+               <input
+                  data-dojo-type="dijit/form/TextBox"
+                  placeholder="Ingrese una contraseña..."
+                  class="form-control"
+                  type="password"
+                  name="password"
+                  id="password"
+                  onkeyup="dialogPassword.validarPassword()"
+               />
+               <div id="passwordNoValida" class="text-center invalid-feedback"></div>
+            </div>
+
+            <div class="form-group my-3">
+               <input
+                  data-dojo-type="dijit/form/TextBox"
+                  placeholder="Ingrese nuevamente su contraseña..."
+                  class="form-control"
+                  type="password"
+                  name="password2"
+                  id="password2"
+                  onkeyup="dialogPassword.validarPasswordsIguales()"
+               />
+               <div id="passwordNoValida2" class="text-center invalid-feedback"></div>
+            </div>
+
+            <div class="dijitDialogPaneActionBar">
+               <div class="row">
+                  <div class="col">
+                     <button id="botonRegistrarse" type="submit">Registrarse</button>
+                  </div>
+                  <div class="col">
+                     <button data-dojo-type="dijit/form/Button" type="button" onClick="dialogPassword.cerrarFormulario()">
+                        Cancelar
+                     </button>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <!-- DIALOG GUARDANDO -->
+         <div
+            data-dojo-type="dijit/Dialog"
+            data-dojo-id="dialogRegistroGuardando"
+            id="dialogRegistroGuardando"
+            class="dialogRegistro"
+            title="Guardando Datos | Registro"
+            data-dojo-props="closable: false, parseOnLoad:true"
+         >
+            <p>Estamos comprobando tus datos, un momento.</p>
+            <div class="text-center" id="logo">
+               <div class="spinner-border text-primary" id="spinner" role="status">
+                  <span class="sr-only"></span>
+               </div>
+               <span id="exito" style="display: block"></span>
+            </div>
+         </div>
+
+         <!-- DIALOG EXITOSO -->
+         <div
+            data-dojo-type="dijit/Dialog"
+            data-dojo-id="dialogRegistroExitoso"
+            id="dialogRegistroExitoso"
+            class="dialogExito"
+            title="Registro Exitoso"
+            data-dojo-props="closable: true, parseOnLoad:true"
+         >
+            <p id="mensajeRegistro"></p>
+            <div class="text-center" id="check">
+               <img src="./www/check.png" id="imagen1" class="mx-1" style="height: 50px" />
+            </div>
          </div>
       </div>
    </body>

@@ -53,45 +53,37 @@ require([
    let error = "Error";
 
    // Dialogs
-   dialogPassword = new Dialog({
+   dialogPasswordIncorrecto = new Dialog({
       title: error,
-      style: "width: 100px",
+      content: "La contraseña es incorrecta 🤔",
+      class: "dialogError",
    });
 
    dialogCamposVacios = new Dialog({
       title: error,
       content: "Todos los campos deben ser completados 🤦‍♂️",
+      class: "dialogError",
    });
 
    dialogUserVacio = new Dialog({
       title: error,
-      content: "La contraseña es incorrecta 🤔",
+      content: "Debe colocar un usuario 👨🏻‍🦯",
+      class: "dialogError",
    });
 
    dialogPassVacia = new Dialog({
       title: error,
       content: "Coloque su contraseña 🤞",
+      class: "dialogError",
    });
 
    dialogUserIncorrecto = new Dialog({
       title: error,
       content: "Debe llenar el campo de usuario 😒",
+      class: "dialogError",
    });
 
    dialogWaiter = new Dialog({});
-
-   // Store
-   let usuarios = [
-      { id: 1, username: "mati", nombre: "Matias Romera", edad: "24", password: "123", role: "it" },
-      { id: 2, username: "fer", nombre: "Fernando Scroppo", edad: "24", password: "123", role: "it" },
-      { id: 3, username: "noe", nombre: "Noelia Escalier", edad: "24", password: "123", role: "it" },
-      { id: 4, username: "braian", nombre: "Braian Almada", edad: "24", password: "123", role: "it" },
-      { id: 5, username: "gonza", nombre: "Gonzalo Delgado", edad: "24", password: "123", role: "it" },
-      { id: 6, username: "rocio", nombre: "Rocio Badessi", edad: "24", password: "123", role: "hr" },
-      { id: 7, username: "flor", nombre: "Florencia Mazza", edad: "24", password: "123", role: "hr" },
-   ];
-
-   store = new Memory({ data: usuarios });
 
    // Boton
    ready(function () {
@@ -106,18 +98,17 @@ require([
          },
          "botonLogin"
       );
-   });
+    });
 
    // Funciones
    const login = () => {
-      console.log('login');
       username = dom.byId("inputUser").value;
       password = dom.byId("inputPassword").value;
 
       if (verificarCampos(username, password)) {
          let usuario = buscarUsuario(username);
          if (usuario) {
-            verificarPassword(usuario, password) ? loginExitoso(usuario) : mostrarDialogPassword();
+            verificarPassword(usuario, password) ? loginExitoso(usuario) : mostrarDialogPasswordIncorrecto();
          }
       }
    };
@@ -140,9 +131,8 @@ require([
 
       setTimeout(function () {
          sessionStorage.setItem("username", usuario.username);
-         sessionStorage.setItem("role", usuario.role);
+         sessionStorage.setItem("rol", usuario.rol);
          sessionStorage.setItem("nombre", usuario.nombre);
-
          window.location.href = "./index.html";
       }, 4000);
    };
@@ -164,8 +154,8 @@ require([
       domAttr.set(dom.byId("inputPassword"), "value", "");
    };
 
-   const mostrarDialogPassword = () => {
-      dialogPassword.show();
+   const mostrarDialogPasswordIncorrecto = () => {
+      dialogPasswordIncorrecto.show();
       domAttr.set(dom.byId("inputPassword"), "value", "");
    };
 
@@ -192,7 +182,6 @@ require([
    const mostrarDialogWaiter = () => {
       dialogWaiter.show();
       mostrarLogo();
-      logoOcultar();
    };
 
    const mostrarLogo = () => {
@@ -201,16 +190,10 @@ require([
          node: "logo",
          duration: 2000,
       };
-      fx.fadeIn(fadeArgs).play();
-   };
 
-   const logoOcultar = () => {
-      var fadeArgs = {
-         node: "logo",
-         duration: 2000,
-      };
+      fx.fadeIn(fadeArgs).play();
       setTimeout(function () {
          fx.fadeOut(fadeArgs).play();
       }, 2000);
    };
-});
+})

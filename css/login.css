@@ -1,4 +1,26 @@
-
 .dijitInline {
    display: block;
+}
+
+.dialogRegistro_underlay {
+   background: #000046; /* fallback for old browsers */
+   background: -webkit-linear-gradient(to right, #1cb5e0, #000046); /* Chrome 10-25, Safari 5.1-6 */
+   background: linear-gradient(to right, #1cb5e0, #000046); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.dialogExito_underlay {
+   background: rgb(96, 228, 117);
+   background: linear-gradient(
+      90deg,
+      rgba(96, 228, 117, 1) 0%,
+      rgba(62, 255, 111, 1) 26%,
+      rgba(27, 194, 60, 1) 72%,
+      rgba(19, 136, 34, 1) 100%
+   );
+}
+
+.dialogError_underlay {
+   background: #333333; /* fallback for old browsers */
+   background: -webkit-linear-gradient(to right, #dd1818, #333333); /* Chrome 10-25, Safari 5.1-6 */
+   background: linear-gradient(to right, #dd1818, #333333); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }

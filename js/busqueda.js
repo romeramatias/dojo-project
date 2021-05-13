@@ -204,7 +204,7 @@ require([
                position: "bottom",
                sizeSwitch: false,
                gotoButton: true,
-               defaultPageSize: 10,
+               defaultPageSize: 40,
             },
          },
          autoWidth: true,

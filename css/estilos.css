@@ -72,3 +72,35 @@ body {
 .bienvenidaParrafo {
    margin-bottom: auto;
 }
+
+.fixedHeaderTable{ background:DodgerBlue;border:1px solid olive; }
+.fixedHeaderTableHeader{
+	border-bottom:1px solid red;
+	background:DodgerBlue;
+	height:21px;line-height:19px; /* no width */
+	white-space:nowrap;
+	overflow:hidden;
+} 
+.fixedHeaderTableHeader div {
+	padding:1px 5px;
+	overflow:hidden;
+	float:left; 
+	border-right:1px solid orange;
+}
+html:first-child .fixedHeaderTableBodyWrapper{overflow:auto;} /* older Opera */
+.fixedHeaderTableBodyWrapper {
+	overflow-y:auto;
+	overflow-x:hidden;
+	background:yellow;
+	clear:left;
+} 
+.fixedHeaderTableBodyWrapper table{border-collapse:collapse;width:100%;}
+.fixedHeaderTableBodyWrapper td{
+	padding:1px 5px; /* pixels */
+	border-right:1px solid green; 
+	border-bottom:1px solid green;
+}
+.fixedHeaderTableBodyWrapper .row_a{background:lightgreen;}
+.fixedHeaderTableBodyWrapper .row_b{background:lightblue;}
+.fixedHeaderTableBodyWrapper .centered{text-align:center;color:crimson;}
+.fixedHeaderTableBodyWrapper .orange{background:orange;}
